@@ -7,8 +7,18 @@ import MainLayout from "../components/main-layout";
 import Home4 from "../pages/home4";
 import NEwHome from "../components/newhome";
 import NEw2 from "../components/new2";
+import Login from "../components/auth/login";
+import Register from "../components/auth/register";
 
 export const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
   {
     path: "/",
     element: <MainLayout />,
