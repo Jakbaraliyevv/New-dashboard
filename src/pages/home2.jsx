@@ -1,16 +1,12 @@
-import Link from "antd/es/typography/Link";
-import React from "react";
+import React from 'react'
+import AddFillial from '../components/add-fillial'
 
-const Home2 = () => {
+function home2() {
   return (
     <div>
-      Home2
-      <br />
-      <br />
-      <br />
-      <Link href="/new-home">Yangi homega</Link>
+      <AddFillial/>
     </div>
-  );
-};
+  )
+}
 
-export default Home2;
+export default home2

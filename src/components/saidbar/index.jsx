@@ -28,11 +28,11 @@ const Saidbar = () => {
           },
           {
             key: "/home2",
-            label: "home 2",
+            label: "Fillials status",
           },
           {
             key: "/home3",
-            label: "home 3",
+            label: "User balance",
           },
           {
             key: "/home4",

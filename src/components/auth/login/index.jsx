@@ -44,7 +44,7 @@ function Login() {
 
         console.log(result, "res");
 
-        navigate("/dashboard");
+        navigate("/");
       } else {
         notify({
           type: "notFound",

@@ -9,6 +9,7 @@ import NEwHome from "../components/newhome";
 import NEw2 from "../components/new2";
 import Login from "../components/auth/login";
 import Register from "../components/auth/register";
+import BenzinTurlari from "../components/benzin-turlari";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
       {
         path: "/new2",
         element: <NEw2 />,
+      },
+      {
+        path: "/benzin-turlari",
+        element: <BenzinTurlari />,
       },
     ],
   },
