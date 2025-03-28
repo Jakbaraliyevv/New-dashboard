@@ -1,17 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const sidebarSlice = createSlice({
-  name: "sidebar",
+const sidebarSlice = createSlice({
+  name: "sidebarSlice",
   initialState: {
-    coolepseSidebar: false,
+    coolepseSidebar: window.innerWidth < 600, // Mobile ekranda default yopiq
   },
-
   reducers: {
-    setCoolepseSidebar(state) {
-      state.coolepseSidebar = !state.coolepseSidebar;
+    setCoolepseSidebar: (state, action) => {
+      // Agar payload berilmagan bo'lsa, default holatni o'zgartiramiz
+      state.coolepseSidebar =
+        action.payload !== undefined ? action.payload : !state.coolepseSidebar;
+    },
+    resetSidebarState: (state) => {
+      state.coolepseSidebar = window.innerWidth < 600;
     },
   },
 });
 
-export const { setCoolepseSidebar } = sidebarSlice.actions;
+export const { setCoolepseSidebar, resetSidebarState } = sidebarSlice.actions;
 export default sidebarSlice.reducer;

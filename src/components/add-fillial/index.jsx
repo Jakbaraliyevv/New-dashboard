@@ -145,31 +145,30 @@ const AddFillial = () => {
       .catch((error) => console.log("Error deleting branch:", error));
   };
 
-  //   const GetNewId = (id) => {
-  //     console.log(id, "Bu id");
-  //   };
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-5 max-[900px]:text-[0.9em]  max-[717px]:text-[0.8em]  max-[385px]:text-[0.7em]">
       <div className="flex flex-col gap-5 bg-[#FFF] shadow rounded-md p-5">
         <div className="flex items-center justify-between">
-          <h1 className="text-[17px] font-bold">Fillallar ro'yxati</h1>
-          <Button onClick={openAddModal}>Add new branch</Button>
+          <h1 className="text-[1.1em] font-bold">Fillallar ro'yxati</h1>
+          <Button className="text-[1em]" onClick={openAddModal}>
+            Add new branch
+          </Button>
         </div>
 
-        <div className="flex flex-wrap gap-4">
+        <div className="        flex flex-wrap gap-4">
           {data2?.map((value) => (
             <div
               key={value.id}
-              className={`transition-colors duration-200 bg-[#e5e7eb] relative p-4 h-[50px] flex justify-between items-center w-auto min-w-[140px] rounded-md cursor-pointer ${
+              className={`transition-colors duration-200 bg-[#e5e7eb] relative p-4 h-[3.2em] flex justify-between items-center w-fit min-w-[11em] rounded-md cursor-pointer pl-6 pr-8    ${
                 selectedBranch === value.name
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
+              } `}
               onClick={() => setSelectedBranch(value.name)}
             >
-              <div className="text-[15px] font-medium">{value?.name}</div>
+              <div className="text-[1em] font-medium">{value?.name}</div>
               <MoreOutlined
-                className="!text-[17px] font-bold cursor-pointer absolute top-2 right-2"
+                className="!text-[1.1em] font-bold cursor-pointer absolute top-2 right-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   setMenuOpen(menuOpen === value.id ? null : value.id);
@@ -204,65 +203,67 @@ const AddFillial = () => {
       </div>
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <Link to={"/dashboard/benzin-turlari"}>
-          <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+          <h2 className="text-[1.2em] font-semibold text-gray-800 mb-4 border-b pb-2">
             {selectedBranch} filial statistikasi
           </h2>
         </Link>
 
-        <div className="grid grid-cols-3 gap-[20px]">
+        <div className="grid grid-cols-3 gap-[1.2em] max-[840px]:grid-cols-2 max-[436px]:grid-cols-1">
           <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center mb-2">
-              <span className="text-xl mr-2">💰</span>
-              <div className="text-sm text-gray-600 font-medium">Foyda</div>
+              <span className="text-[1.2em] mr-2">💰</span>
+              <div className="text-[1em] text-gray-600 font-medium">Foyda</div>
             </div>
-            <div className="text-2xl font-bold text-blue-700">
+            <div className="text-[1.5em] font-bold text-blue-700">
               {selectedData?.profit}
             </div>
           </div>
           <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center mb-2">
-              <span className="text-xl mr-2">💸</span>
-              <div className="text-sm text-gray-600 font-medium">Xarajat</div>
+              <span className="text-[1.2em] mr-2">💸</span>
+              <div className="text-[1em] text-gray-600 font-medium">
+                Xarajat
+              </div>
             </div>
-            <div className="text-2xl font-bold text-blue-700">
+            <div className="text-[1.5em] font-bold text-blue-700">
               {selectedData?.expense}
             </div>
           </div>
           <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center mb-2">
-              <span className="text-xl mr-2">📦</span>
-              <div className="text-sm text-gray-600 font-medium">
+              <span className="text-[1.2em] mr-2">📦</span>
+              <div className="text-[1em] text-gray-600 font-medium">
                 Kiruvchi miqdor
               </div>
             </div>
-            <div className="text-2xl font-bold text-blue-700">
+            <div className="text-[1.5em] font-bold text-blue-700">
               {selectedData?.debt}
             </div>
           </div>
           <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center mb-2">
-              <span className="text-xl mr-2">📊</span>
-              <div className="text-sm text-gray-600 font-medium">Qoldiq</div>
+              <span className="text-[1.2em] mr-2">📊</span>
+              <div className="text-[1em] text-gray-600 font-medium">Qoldiq</div>
             </div>
-            <div className="text-2xl font-bold text-blue-700">
+            <div className="text-[1.5em] font-bold text-blue-700">
               {selectedData?.astatka}
             </div>
           </div>
           <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center mb-2">
-              <span className="text-xl mr-2">💳</span>
-              <div className="text-sm text-gray-600 font-medium">Qarz</div>
+              <span className="text-[1.2em] mr-2">💳</span>
+              <div className="text-[1em] text-gray-600 font-medium">Qarz</div>
             </div>
-            <div className="text-2xl font-bold text-blue-700">
+            <div className="text-[1.5em] font-bold text-blue-700">
               {selectedData?.incoming_quantity}
             </div>
           </div>
           <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center mb-2">
-              <span className="text-xl mr-2">💵</span>
-              <div className="text-sm text-gray-600 font-medium">Kassa</div>
+              <span className="text-[1.2em] mr-2">💵</span>
+              <div className="text-[1em] text-gray-600 font-medium">Kassa</div>
             </div>
-            <div className="text-2xl font-bold text-blue-700">
+            <div className="text-[1.5em] font-bold text-blue-700">
               {selectedData?.kassa}
             </div>
           </div>
@@ -287,7 +288,7 @@ const AddFillial = () => {
           <div className="space-y-2">
             <label
               htmlFor="branch"
-              className="text-[15px] font-medium text-gray-700"
+              className="text-[1em] font-medium text-gray-700"
             >
               Fillial nomini kiriting
             </label>
@@ -306,7 +307,7 @@ const AddFillial = () => {
           <div className="space-y-2">
             <label
               htmlFor="address"
-              className="text-[15px] font-medium text-gray-700"
+              className="text-[1em] font-medium text-gray-700"
             >
               Manzilni kiriting
             </label>
@@ -325,7 +326,7 @@ const AddFillial = () => {
           <div className="space-y-2">
             <label
               htmlFor="manager"
-              className="text-[15px] font-medium text-gray-700"
+              className="text-[1em] font-medium text-gray-700"
             >
               Manager
             </label>
@@ -344,7 +345,7 @@ const AddFillial = () => {
           <div className="space-y-2">
             <label
               htmlFor="phone"
-              className="text-[15px] font-medium text-gray-700"
+              className="text-[1em] font-medium text-gray-700"
             >
               Telefon raqamni kiriting
             </label>
