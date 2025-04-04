@@ -21,6 +21,9 @@ const MainLayout = () => {
         <Header
           style={{
             padding: 0,
+            top: 0,
+            position: "sticky",
+            zIndex: 122,
             background: colorBgContainer,
           }}
         >
@@ -41,7 +44,7 @@ const MainLayout = () => {
           style={{
             margin: "24px 16px",
             padding: 24,
-            minHeight: "100%",  
+            minHeight: "100%",
             borderRadius: borderRadiusLG,
           }}
         >
