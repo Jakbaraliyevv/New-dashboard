@@ -150,23 +150,28 @@ const AddFillial = () => {
       <div className="flex flex-col gap-5 bg-[#FFF] shadow rounded-md p-5">
         <div className="flex items-center justify-between">
           <h1 className="text-[1.1em] font-bold">Fillallar ro'yxati</h1>
-          <Button className="text-[1em]" onClick={openAddModal}>
+          <Button
+            className=" buttonAndt text-[15px] w-[160px] max-[900px]:w-[140px] max-[900px]:text-[13px] "
+            onClick={openAddModal}
+          >
             Add new branch
           </Button>
         </div>
 
-        <div className="        flex flex-wrap gap-4">
+        <div className=" flex flex-wrap gap-4">
           {data2?.map((value) => (
             <div
               key={value.id}
-              className={`transition-colors duration-200 bg-[#e5e7eb] relative p-4 h-[3.2em] flex justify-between items-center w-fit min-w-[11em] rounded-md cursor-pointer pl-6 pr-8    ${
+              className={` buttonAndt2 transition-colors duration-200 bg-[#e5e7eb] relative p-4 h-[3.2em] flex justify-between items-center w-fit min-w-[11em] rounded-md cursor-pointer pl-6 pr-8    ${
                 selectedBranch === value.name
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               } `}
               onClick={() => setSelectedBranch(value.name)}
             >
-              <div className="text-[1em] font-medium">{value?.name}</div>
+              <div className="text-[1em] font-medium">
+                {value?.name}
+              </div>
               <MoreOutlined
                 className="!text-[1.1em] font-bold cursor-pointer absolute top-2 right-2"
                 onClick={(e) => {
@@ -203,7 +208,7 @@ const AddFillial = () => {
       </div>
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <Link to={"/dashboard/benzin-turlari"}>
-          <h2 className="text-[1.2em] font-semibold text-gray-800 mb-4 border-b pb-2">
+          <h2 className=" text-[1.2em] font-semibold text-gray-800 mb-4 border-b pb-2">
             {selectedBranch} filial statistikasi
           </h2>
         </Link>

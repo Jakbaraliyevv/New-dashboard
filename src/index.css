@@ -9,4 +9,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-  
+
+@media (max-width: 717px) {
+  .buttonAndt {
+    width: 110px !important;
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .buttonAndt {
+    width: 90px !important;
+    font-size: 9px !important;
+    height: 24px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .buttonAndt {
+    width: 70px !important;
+    font-size: 7px !important;
+    height: 20px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .buttonAndt2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px !important;
+    font-size: 9px !important;
+    height: 24px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .buttonAndt2 {
+    width: 70px !important;
+    font-size: 8px !important;
+    height: 20px !important;
+  }
+}
