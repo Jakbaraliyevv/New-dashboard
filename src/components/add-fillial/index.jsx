@@ -98,8 +98,8 @@ const AddFillial = () => {
   const handleBranchSubmit = () => {
     if (isEditMode) {
       axios({
-        url: `/branch/update/${branchData.id}/`,
-        method: "PUT",
+        url: `/branches/${branchData.id}/`,
+        method: "PATCH",
         data: branchData,
       })
         .then((response) => {
@@ -111,7 +111,7 @@ const AddFillial = () => {
         .catch((error) => console.log("Error updating branch:", error));
     } else {
       axios({
-        url: "/branch/create/",
+        url: "/branch/",
         method: "POST",
         data: branchData,
       })
@@ -133,7 +133,7 @@ const AddFillial = () => {
 
   const confirmDeleteBranch = () => {
     axios({
-      url: `/branch/delete/${selectedBranchId}/`,
+      url: `/branches/${selectedBranchId}/`,
       method: "DELETE",
     })
       .then((response) => {
@@ -158,11 +158,11 @@ const AddFillial = () => {
           </Button>
         </div>
 
-        <div className=" flex flex-wrap gap-4">
+        <div className=" flex flex-wrap gap-4 max-[600px]:grid max-[600px]:grid-cols-3 max-[500px]:grid-cols-2">
           {data2?.map((value) => (
             <div
               key={value.id}
-              className={` buttonAndt2 transition-colors duration-200 bg-[#e5e7eb] relative p-4 h-[3.2em] flex justify-between items-center w-fit min-w-[11em] rounded-md cursor-pointer pl-6 pr-8    ${
+              className={` buttonAndt2 transition-colors duration-200 bg-[#e5e7eb] relative p-4 h-[3.2em] flex justify-between items-center w-fit min-w-[120px] rounded-md cursor-pointer pl-6 pr-8 max-[600px]:!w-full   ${
                 selectedBranch === value.name
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"

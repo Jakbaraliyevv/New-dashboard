@@ -104,10 +104,10 @@ function BenzinTurlari() {
                     {value?.stock}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-end">
-                    <Button className="!w-[40px] mr-2" type="primary">
+                    <Button className="w-[40px] mr-2" type="primary">
                       Tahrirlash
                     </Button>
-                    <Button className="!w-[40px]" danger>
+                    <Button className="w-[40px]" danger>
                       O‘chirish
                     </Button>
                   </td>

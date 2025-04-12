@@ -7,11 +7,16 @@ function UserBalance() {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState("");
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [branch2, setBranch2] = useState([]);
+  const [user, setUser] = useState("");
   const [balance, setBalance] = useState("");
+  const [user2, setUser2] = useState("");
+  const [balance2, setBalance2] = useState("");
   const [branch, setBranch] = useState([]);
   const axios = useAxios();
+  const [userNameUpdata, setUserNameUpdata] = useState("");
+  const [userBalanceUpdata, setBalanceUpdata] = useState("");
   // branch
   useEffect(() => {
     axios({
@@ -44,8 +49,7 @@ function UserBalance() {
 
   const postData = () => {
     const data = {
-      user_id: user,
-      branch: branch2,
+      user,
       balance,
     };
 
@@ -66,6 +70,14 @@ function UserBalance() {
       })
       .catch((error) => console.log(error));
   };
+
+  //   Userbalense get
+  const UpdateData = (id) => {
+    console.log(data, "ress");
+    const findData = data?.results?.find((item) => item.id == id);
+    setUserNameUpdata(findData?.username);
+    setBalanceUpdata(findData?.balance);
+  };
   return (
     <section>
       <div className="w-[90%] m-auto pt-[20px]">
@@ -80,16 +92,16 @@ function UserBalance() {
         <table className="w-full mt-7">
           <thead className="bg-gray-200">
             <tr>
-              <th className="border border-gray-300 px-4 py-2 w-1/5">Ismi</th>
-              <th className="border border-gray-300 px-4 py-2 w-1/5">
-                Familiyasi
-              </th>
               <th className="border border-gray-300 px-4 py-2 w-1/5">
                 Foydalanuvchi nomi
               </th>
               <th className="border border-gray-300 px-4 py-2 w-1/5">Balans</th>
+
               <th className="border border-gray-300 px-4 py-2 w-1/5">
                 Fillial
+              </th>
+              <th className="border border-gray-300 px-4 py-2 w-1/5">
+                Yaratilgan vaqti
               </th>
               <th className="border border-gray-300 px-4 py-2 w-1/5">
                 Amallar
@@ -97,16 +109,10 @@ function UserBalance() {
             </tr>
           </thead>
           <tbody>
-            {data?.map((item, index) => (
+            {data?.results?.map((item, index) => (
               <tr key={index} className="hover:bg-gray-100">
                 <td className="border border-gray-300 px-4 py-2 text-center">
-                  {item.user?.first_name}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  {item.user?.last_name}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-center">
-                  {item.user?.username}
+                  {item.username}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-center">
                   {item.balance} so'm
@@ -114,8 +120,15 @@ function UserBalance() {
                 <td className="border border-gray-300 px-4 py-2 text-center">
                   {item?.branch}
                 </td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {item?.created_at}
+                </td>
+
                 <td className="border border-gray-300 px-4 py-2 text-end flex gap-2">
                   <Button
+                    onClick={() => {
+                      setIsModalOpen2(true), UpdateData(item.id);
+                    }}
                     type="primary"
                     icon={<EditOutlined />}
                     className="mr-2"
@@ -192,25 +205,66 @@ function UserBalance() {
               ))}
             </select>
           </div>
+        </form>
+      </Modal>
+
+      <Modal
+        title="Hisobni to'ldirish"
+        open={isModalOpen2}
+        onCancel={() => setIsModalOpen2(false)}
+        footer={[
+          <Button key="cancel" onClick={() => setIsModalOpen2(false)}>
+            Bekor qilish
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={() => {
+              setIsModalOpen2(false);
+              postData();
+            }}
+          >
+            To'ldirish
+          </Button>,
+        ]}
+      >
+        <form className="flex flex-col gap-7">
           <div className="space-y-2">
             <label
-              htmlFor="branch"
+              htmlFor="user"
               className="text-[17px] font-medium text-gray-700"
             >
-              Fillial
+              Foydalanuvchi
             </label>
             <select
-              id="branch"
-              onChange={(e) => setBranch2(e.target.value)}
+              id="user"
+              value={userNameUpdata}
+              onChange={(e) => setUserNameUpdata(e.target.value)}
               className="w-full h-11 px-3 border border-gray-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">Fillialni tanlang</option>
-              {branch?.map((value) => (
-                <option key={value?.name} value={value.id}>
-                  {value?.name}
+              <option value="">Foydalanuvchi tanlang</option>
+              {data2?.map((value) => (
+                <option key={value?.username} value={value.id}>
+                  {value?.username}
                 </option>
               ))}
             </select>
+          </div>
+          <div className="space-y-2">
+            <label
+              htmlFor="benzin"
+              className="text-[17px] font-medium text-gray-700"
+            >
+              Balance
+            </label>
+            <Input
+              id="balance"
+              value={userBalanceUpdata}
+              required
+              className="h-11 rounded-lg text-base"
+              onChange={(e) => setBalanceUpdata(e.target.value)}
+              placeholder="Balansingizni  kiriting"
+            />
           </div>
         </form>
       </Modal>
