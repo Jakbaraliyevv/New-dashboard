@@ -233,7 +233,7 @@ const Saidbar = () => {
     { key: "/", label: "Status", icon: <HomeOutlined /> },
     { key: "/home2", label: "Fillials status", icon: <BranchesOutlined /> },
     { key: "/home3", label: "User balance", icon: <WalletOutlined /> },
-    { key: "/home4", label: "Home 4", icon: <AppstoreOutlined /> },
+    { key: "/benzin-turlari", label: "Benzin turlari", icon: <AppstoreOutlined /> },
   ];
 
   return (

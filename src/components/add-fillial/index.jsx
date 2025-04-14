@@ -193,13 +193,13 @@ const AddFillial = () => {
                   >
                     Delete
                   </button>
-                  <Link
+                  {/* <Link
                     to="/benzin-turlari"
                     state={{ branchId: value.id }} // ID ni to‘g‘ri yuborish
                     className="block w-full text-left px-4 py-2 hover:bg-gray-200"
                   >
                     Add New Benzin
-                  </Link>
+                  </Link> */}
                 </div>
               )}
             </div>
