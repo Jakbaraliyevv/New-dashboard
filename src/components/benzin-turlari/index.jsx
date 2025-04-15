@@ -489,7 +489,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import notificationApi from "../../generic/notify";
 import { useAxios } from "../../axios";
-
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 function BenzinTurlari() {
   const axios = useAxios();
   const notify = notificationApi();
@@ -623,21 +623,21 @@ function BenzinTurlari() {
           </Button>
         </div>
 
-        <table className="w-full mt-7">
+        <table className="w-full mt-7 block  max-[768px]:hidden">
           <thead className="bg-gray-200">
             <tr>
-              <th className="border border-gray-300 px-4 py-2 w-1/5">Branch</th>
-              <th className="border border-gray-300 px-4 py-2 w-1/5">Name</th>
-              <th className="border border-gray-300 px-4 py-2 w-1/5">Price</th>
-              <th className="border border-gray-300 px-4 py-2 w-1/5">Stock</th>
-              <th className="border border-gray-300 px-4 py-2 w-1/5">
+              <th className="border border-gray-300 px-4 py-2 w-1/4">Branch</th>
+              <th className="border border-gray-300 px-4 py-2 w-1/4">Name</th>
+              <th className="border border-gray-300 px-4 py-2 w-1/4">Price</th>
+              <th className="border border-gray-300 px-4 py-2 w-1/4">Stock</th>
+              <th className="border border-gray-300 px-4 py-2 w-1/7">
                 Amallar
               </th>
             </tr>
           </thead>
           <tbody>
             {benzinData && benzinData.length > 0 ? (
-              benzinData.map((value) => (
+              benzinData?.map((value) => (
                 <tr className="hover:bg-gray-100" key={value?.id}>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {value?.branch}
@@ -650,24 +650,25 @@ function BenzinTurlari() {
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {value?.stock}
+                    dcdcd
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 text-end">
+                  <td className="border border-gray-300 px-4 py-2 flex text-center">
                     <Button
-                      className="w-[80px] mr-2"
+                      className="w-[40px] mr-2"
                       type="primary"
                       onClick={() => openEditModal(value)}
                     >
-                      Tahrirlash
+                      <EditOutlined />
                     </Button>
                     <Button
-                      className="w-[80px]"
+                      className="w-[40px]"
                       danger
                       onClick={() => {
                         setDeleteId(value?.id);
                         setIsDeleteModalOpen(true);
                       }}
                     >
-                      O‘chirish
+                      <DeleteOutlined />
                     </Button>
                   </td>
                 </tr>
@@ -684,10 +685,53 @@ function BenzinTurlari() {
             )}
           </tbody>
         </table>
+        <div className=" flex-col gap-3 mt-5 bg-gray-200 hidden max-[768px]:flex max-[768px]:block">
+          {benzinData?.map((value) => (
+            <div className="space-y-4 ">
+              <div className="border  shadow-sm p-4 bg-white">
+                <div className="flex justify-between pb-2 border-b">
+                  <span className="font-medium">Branch</span>
+                  <span>{value?.branch}</span>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Name</span>
+                  <span>{value?.name}</span>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Price</span>
+                  <span className="">{value?.price}</span>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Stock</span>
+                  <span>{value?.stock}</span>
+                </div>
+                <div className="flex justify-between mt-3  border-b">
+                  <span className="font-medium">Amallar</span>
+                  <span className="flex items-center gap-4">
+                    <p onClick={() => openEditModal(value)}>
+                      <EditOutlined /> Edit
+                    </p>
+                    <p
+                      className="text-red-600"
+                      onClick={() => {
+                        setDeleteId(value?.id);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    >
+                      <DeleteOutlined />
+                      Delete
+                    </p>
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Create/Edit Modal */}
       <Modal
+        className="modall"
         open={isModalOpen}
         onCancel={() => {
           setIsModalOpen(false);
@@ -695,6 +739,7 @@ function BenzinTurlari() {
         }}
         footer={[
           <Button
+            className="w-[120px] text-[15px] max-[768px]:w-[90px] max-[768px]:text-[12px]"
             key="cancel"
             onClick={() => {
               setIsModalOpen(false);
@@ -703,23 +748,28 @@ function BenzinTurlari() {
           >
             Bekor qilish
           </Button>,
-          <Button key="submit" type="primary" onClick={postData}>
+          <Button
+            className="w-[120px] text-[15px] max-[768px]:w-[90px] max-[768px]:text-[12px]"
+            key="submit"
+            type="primary"
+            onClick={postData}
+          >
             {isEdit ? "Yangilash" : "Saqlash"}
           </Button>,
         ]}
       >
         <div className="mt-5">
-          <form className="flex flex-col gap-7">
+          <form className="flex flex-col gap-7 max-[768px]:text-[0.9em]">
             <div className="space-y-2">
               <label
                 htmlFor="benzin"
-                className="text-[17px] font-medium text-gray-700"
+                className="text-[1em] font-medium text-gray-700"
               >
                 Benzin nomi
               </label>
               <Input
                 id="benzin"
-                className="h-11 rounded-lg text-base"
+                className="h-[35px] rounded-md text-[1em] max-[768px]:h-[30px]"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Benzin nomini kiriting"
@@ -728,13 +778,13 @@ function BenzinTurlari() {
             <div className="space-y-2">
               <label
                 htmlFor="price"
-                className="text-[17px] font-medium text-gray-700"
+                className="text-[1em] font-medium text-gray-700"
               >
                 Benzin narxi
               </label>
               <Input
                 id="price"
-                className="h-11 rounded-lg text-base"
+                className="h-[35px] rounded-md text-[1em] max-[768px]:h-[30px]"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Benzin narxini kiriting"
@@ -743,13 +793,13 @@ function BenzinTurlari() {
             <div className="space-y-2">
               <label
                 htmlFor="qoldiq"
-                className="text-[17px] font-medium text-gray-700"
+                className="text-[1em] font-medium text-gray-700"
               >
                 Benzin qoldiq
               </label>
               <Input
                 id="qoldiq"
-                className="h-11 rounded-lg text-base"
+                className="h-[35px] rounded-md text-[1em] max-[768px]:h-[30px]"
                 value={stock}
                 onChange={(e) => setStock(e.target.value)}
                 placeholder="Benzin qoldigini kiriting"
@@ -758,7 +808,7 @@ function BenzinTurlari() {
             <div className="space-y-2">
               <label
                 htmlFor="branch"
-                className="text-[17px] font-medium text-gray-700"
+                className="text-[1em] font-medium text-gray-700"
               >
                 Fillial
               </label>
@@ -766,7 +816,7 @@ function BenzinTurlari() {
                 id="branch"
                 value={selectt}
                 onChange={(e) => setSelect(e.target.value)}
-                className="w-full h-11 px-3 border border-gray-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full h-[35px] px-3 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 max-[768px]:h-[30px]"
               >
                 <option value="">Fillialni tanlang</option>
                 {branch?.map((value) => (
@@ -782,18 +832,31 @@ function BenzinTurlari() {
 
       {/* Delete Confirm Modal */}
       <Modal
+        className="modall"
         open={isDeleteModalOpen}
         onCancel={() => setIsDeleteModalOpen(false)}
         footer={[
-          <Button key="cancel" onClick={() => setIsDeleteModalOpen(false)}>
+          <Button
+            className="w-[120px] text-[15px] max-[768px]:w-[90px] max-[768px]:text-[12px]"
+            key="cancel"
+            onClick={() => setIsDeleteModalOpen(false)}
+          >
             Bekor qilish
           </Button>,
-          <Button key="delete" type="primary" danger onClick={deleteBenzin}>
+          <Button
+            className="w-[120px] text-[15px] max-[768px]:w-[90px] max-[768px]:text-[12px]"
+            key="delete"
+            type="primary"
+            danger
+            onClick={deleteBenzin}
+          >
             Ha, o‘chirish
           </Button>,
         ]}
       >
-        <p>Rostdan ham ushbu benzin turini o‘chirmoqchimisiz?</p>
+        <p className="text-[1em] max-[768px]:text-[0.9em]">
+          Rostdan ham ushbu benzin turini o‘chirmoqchimisiz?
+        </p>
       </Modal>
     </section>
   );

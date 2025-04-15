@@ -1,13 +1,3 @@
-// import { Navigate, Outlet } from "react-router-dom";
-
-// const PrivateRoute = () => {
-//   const isAuthenticated = localStorage.getItem("token"); // Token yoki login statusini tekshirish
-
-//   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
-// };
-
-// export default PrivateRoute;
-
 import { Navigate, Outlet } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"; // Bu kutubxonani o'rnatish kerak: npm install jwt-decode
 

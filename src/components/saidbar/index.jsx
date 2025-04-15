@@ -233,7 +233,12 @@ const Saidbar = () => {
     { key: "/", label: "Status", icon: <HomeOutlined /> },
     { key: "/home2", label: "Fillials status", icon: <BranchesOutlined /> },
     { key: "/home3", label: "User balance", icon: <WalletOutlined /> },
-    { key: "/benzin-turlari", label: "Benzin turlari", icon: <AppstoreOutlined /> },
+    {
+      key: "/benzin-turlari",
+      label: "Benzin turlari",
+      icon: <AppstoreOutlined />,
+    },
+    { key: "/outgoing", label: "Chiqim", icon: <WalletOutlined /> },
   ];
 
   return (
@@ -263,7 +268,7 @@ const Saidbar = () => {
         style={{
           position: "fixed",
           height: "100vh",
-          zIndex: 1001,
+          zIndex: 1000,
           left: 0,
           overflow: "auto",
           boxShadow: "2px 0 8px rgba(0,0,0,0.15)",

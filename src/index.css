@@ -52,3 +52,20 @@
   }
 }
 
+@media (max-width: 768px) {
+  .modall {
+    width: 400px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .modall {
+    width: 350px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .modall {
+    width: 300px !important;
+  }
+}

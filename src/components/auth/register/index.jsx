@@ -47,7 +47,7 @@ function Register() {
           type: "register",
         });
         localStorage.setItem("register", JSON.stringify(data));
-        navigate("/");
+        navigate("/login");
       } else {
         notify({
           type: "error",
