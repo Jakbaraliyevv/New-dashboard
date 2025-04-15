@@ -610,7 +610,7 @@ function BenzinTurlari() {
 
   return (
     <section className="bg-[#f9fafb] min-h-screen">
-      <div className="w-[90%] m-auto pt-[20px]">
+      <div className="pt-[20px]">
         <div className="bg-blue-600 flex items-center justify-between p-5 rounded-md">
           <h2 className="text-[#FFF] text-[25px] font-bold">Benzin turlari</h2>
           <Button
