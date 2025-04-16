@@ -2,24 +2,20 @@ import { Button, Input, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { EditOutlined, DeleteOutlined, CloseOutlined } from "@ant-design/icons";
 import { useAxios } from "../../axios";
-import { data } from "react-router-dom";
 
-function OutgoingComponents() {
+function DebtQarzlarComponents() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false); // Tahrirlash holatini boshqarish
-  const [selectt, setSelect] = useState("");
   const [showFullReason, setShowFullReason] = useState(false);
   const [activeReason, setActiveReason] = useState("");
   const [userData, setUserData] = useState();
-  const [outGoing, setOutgoing] = useState();
   const [deleteId, setDeleteId] = useState(null);
 
   const [branch, setBranch] = useState();
-  const [benzin, setBenzin] = useState();
+  //  Get input value
   const [fillial, setFillial] = useState("");
-  const [getBenzin, SetGetbenzin] = useState("");
-  const [getUser, setGetUser] = useState("");
+  const [name, setName] = useState("");
   const [sabab, setSabab] = useState("");
   const [miqdor, setMiqdor] = useState("");
   const axios = useAxios();
@@ -44,16 +40,6 @@ function OutgoingComponents() {
 
   // Textni koproq korish uchun bu </>
 
-  //   User Datani get qilish <>
-  useEffect(() => {
-    axios({
-      method: "GET",
-      url: "/user-data/",
-    })
-      .then((data) => setOutgoing(data))
-      .catch((error) => console.log(error));
-  }, []);
-
   //   Fillial Datani get qilish <>
   useEffect(() => {
     axios({
@@ -64,21 +50,12 @@ function OutgoingComponents() {
       .catch((error) => console.log(error));
   }, []);
 
-  //   Benzin Datani get qilish <>
-  useEffect(() => {
-    axios({
-      method: "GET",
-      url: "/benzin/",
-    })
-      .then((data) => setBenzin(data))
-      .catch((error) => console.log(error));
-  }, []);
-  //   Outgoingni get qilish
+  //   Debtni get qilish
 
   const getOutgongData = () => {
     axios({
       method: "GET",
-      url: "/outgoing/",
+      url: "/debt/",
     })
       .then((data) => setUserData(data))
       .catch((error) => console.log(error));
@@ -99,21 +76,22 @@ function OutgoingComponents() {
     return `${day}.${month}.${year}, ${hours}:${minutes}`;
   };
   //   User Datani get qilish </>
-  const postData = () => {
-    data = {
-      user: getUser,
-      miqdori: miqdor,
-      sabab: sabab,
-      branch: fillial,
-      benzin: getBenzin,
-    };
 
+  const postData = () => {
+    const data = {
+      name,
+      miqdor,
+      branch: fillial,
+      izoh: sabab,
+    };
     console.log(data, "data");
   };
+
   const clearForm = () => {};
+
   const deleteBenzin = () => {
     axios({
-      url: `/outgoings/${deleteId}/`,
+      url: `/debts/${deleteId}/`,
       method: "DELETE",
     })
       .then(() => {
@@ -126,14 +104,14 @@ function OutgoingComponents() {
       });
   };
   return (
-    <section>
+    <section >
       <div className="">
         <div className="bg-blue-600 flex items-center justify-between p-5 rounded-md">
-          <h2 className="text-[#FFF] text-[25px] font-bold">Chiqimlar</h2>
+          <h2 className="text-[#FFF] text-[25px] font-bold">Qarzlar</h2>
           <Button
             onClick={() => openModal(false)} // Add holatida
           >
-            Add Chiqim
+            Add Qarz
           </Button>
         </div>
 
@@ -161,7 +139,7 @@ function OutgoingComponents() {
                   {value?.branch}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-center">
-                  {value?.user}
+                  {value?.nomi}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-center">
                   {value?.miqdori}
@@ -169,17 +147,19 @@ function OutgoingComponents() {
 
                 <td
                   onClick={() => {
-                    setActiveReason(value?.sabab);
+                    setActiveReason(value?.description);
                     setShowFullReason(true);
                   }}
                   className="border border-gray-300 px-4 py-2 text-center relative group"
                 >
                   <div className="flex items-center justify-center">
-                    <span className="mr-1">{truncateText(value?.sabab)}</span>
+                    <span className="mr-1">
+                      {truncateText(value?.description)}
+                    </span>
                   </div>
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-center">
-                  {formatDate(value?.vaqti)}
+                  {formatDate(value?.created_at)}
                 </td>
                 <td className="border border-gray-300 px-4 py-2 flex justify-center">
                   <Button
@@ -283,46 +263,20 @@ function OutgoingComponents() {
                 ))}
               </select>
             </div>
+
             <div className="space-y-2">
               <label
-                htmlFor="branch"
+                htmlFor="benzin"
                 className="text-[1em] font-medium text-gray-700"
               >
-                Foydalanuvchi
+                Nomi
               </label>
-              <select
-                id="user"
-                onChange={(e) => setUserData(e.target.value)}
-                className="w-full h-[35px] px-3 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 max-[768px]:h-[30px]"
-              >
-                <option value="">Foydalanuvchi tanlang</option>
-                {outGoing?.map((value) => (
-                  <option
-                    key={value?.id}
-                    value={value?.id}
-                    className="text-red"
-                  >
-                    {value?.username}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="space-y-2">
-              <label className="text-[1em] font-medium text-gray-700">
-                Benzin turi
-              </label>
-              <select
-                onChange={(e) => SetGetbenzin(e.target.value)}
-                name="benzin_brand"
-                className="w-full h-[35px] px-3 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 max-[768px]:h-[30px]"
-              >
-                <option value="">Benzin tanlang</option>
-                {benzin?.map((value) => (
-                  <option key={value?.id} value={value?.id}>
-                    {value?.name}
-                  </option>
-                ))}
-              </select>
+              <Input
+                id="benzin"
+                className="h-[35px] rounded-md text-[1em] max-[768px]:h-[30px]"
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Nomini kiriting"
+              />
             </div>
             <div className="space-y-2">
               <label
@@ -339,9 +293,15 @@ function OutgoingComponents() {
               />
             </div>
             <div>
+              <label
+                htmlFor="benzin"
+                className="text-[1em] font-medium text-gray-700"
+              >
+                Izoh
+              </label>
               <Input.TextArea
                 onChange={(e) => setSabab(e.target.value)}
-                placeholder="Sababni kiriting"
+                placeholder="Izohni kiriting"
                 rows={4}
               />
             </div>
@@ -381,4 +341,4 @@ function OutgoingComponents() {
   );
 }
 
-export default OutgoingComponents;
+export default DebtQarzlarComponents;

@@ -490,6 +490,10 @@ import { useLocation } from "react-router-dom";
 import notificationApi from "../../generic/notify";
 import { useAxios } from "../../axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+
+
+
+
 function BenzinTurlari() {
   const axios = useAxios();
   const notify = notificationApi();
@@ -609,8 +613,8 @@ function BenzinTurlari() {
   };
 
   return (
-    <section className="bg-[#f9fafb] min-h-screen">
-      <div className="pt-[20px]">
+    <section >
+      <div className="">
         <div className="bg-blue-600 flex items-center justify-between p-5 rounded-md">
           <h2 className="text-[#FFF] text-[25px] font-bold">Benzin turlari</h2>
           <Button

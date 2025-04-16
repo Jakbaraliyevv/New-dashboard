@@ -12,6 +12,14 @@ import Register from "../components/auth/register";
 import MainLayout from "../components/main-layout";
 import PrivateRoute from "../components/privite-router";
 import OutGoingchiqim from "../pages/outgoing";
+import DebtQarzlar from "../pages/debt";
+import KirimIncomimng from "../pages/kirim";
+import Opretors from "../pages/operators";
+import Expenses from "../pages/expenses";
+import Banks from "../pages/banks";
+import Foydalar from "../pages/foydalar";
+import OperatorRecords from "../pages/operator-records";
+import Summalar from "../pages/summalar";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +47,14 @@ export const router = createBrowserRouter([
           { path: "/new2", element: <NEw2 /> },
           { path: "/benzin-turlari", element: <BenzinTurlari /> },
           { path: "/outgoing", element: <OutGoingchiqim /> },
+          { path: "/debt", element: <DebtQarzlar /> },
+          { path: "/kirim", element: <KirimIncomimng /> },
+          { path: "/operators", element: <Opretors /> },
+          { path: "/expenses", element: <Expenses /> },
+          { path: "/banks", element: <Banks /> },
+          { path: "/foydalar", element: <Foydalar /> },
+          { path: "/operator-records", element: <OperatorRecords /> },
+          { path: "/summalar", element: <Summalar /> },
         ],
       },
     ],

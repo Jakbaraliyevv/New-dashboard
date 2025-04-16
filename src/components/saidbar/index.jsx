@@ -239,6 +239,18 @@ const Saidbar = () => {
       icon: <AppstoreOutlined />,
     },
     { key: "/outgoing", label: "Chiqim", icon: <WalletOutlined /> },
+    { key: "/debt", label: "Qarzlar", icon: <WalletOutlined /> },
+    { key: "/kirim", label: "Kirim", icon: <WalletOutlined /> },
+    { key: "/operators", label: "Operators", icon: <WalletOutlined /> },
+    { key: "/expenses", label: "Expenses", icon: <WalletOutlined /> },
+    { key: "/banks", label: "Banks", icon: <WalletOutlined /> },
+    { key: "/foydalar", label: "Foydalar", icon: <WalletOutlined /> },
+    {
+      key: "/operator-records",
+      label: "Opertor recordes",
+      icon: <WalletOutlined />,
+    },
+    { key: "/summalar", label: "Summalar", icon: <WalletOutlined /> },
   ];
 
   return (

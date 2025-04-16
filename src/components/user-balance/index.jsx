@@ -16,7 +16,7 @@
 //   const [branch, setBranch] = useState([]);
 //   const axios = useAxios();
 //   const [userNameUpdata, setUserNameUpdata] = useState("");
-//   const [userBalanceUpdata, setBalanceUpdata] = useState("");
+//   const [alanceUpdata, setBalanceUpdata] = useState("");
 //   // branch
 //   useEffect(() => {
 //     axios({
@@ -689,7 +689,7 @@ function UserBalance() {
   return (
     <section>
       <div className="max-[900px]:text-[0.8em]">
-        <div className="bg-blue-600 flex items-center justify-between p-5 rounded-md max-[500px]:text-[0.9em]">
+        <div className="bg-blue-600 flex items-center justify-between p-6 rounded-md max-[500px]:text-[0.9em]">
           <h2 className="text-[#FFF] text-[1.5em] font-bold max-[500px]:text-[14px]">
             Foydalanuvchilar ro'yxati
           </h2>
