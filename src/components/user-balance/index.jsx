@@ -620,24 +620,25 @@ function UserBalance() {
 
   // Ma'lumotlarni yangilash funksiyasi
   const updateUserData = () => {
-    if (!userBalanceUpdata) {
-      notification.error({ message: "Balans kiritilishi shart!" });
+    if ((!userBalanceUpdata, !userNameUpdata)) {
+      notification.error({ message: "Inputlarni kiritilishingiz shart!" });
       return;
     }
 
     axios({
       url: `/userbalances/${currentUserId}/`, // Tahrirlash uchun endpoint
-      method: "PATCH",
+      method: "PUT",
       data: {
         balance: userBalanceUpdata,
+        user: userNameUpdata,
       },
     })
       .then(() => {
         notification.success({
           message: "Ma'lumotlar muvaffaqiyatli yangilandi!",
         });
-        setIsModalOpen2(false);
 
+        setIsModalOpen2(false);
         // Ma'lumotlarni yangilash uchun qayta so'rov yuborish
         axios({
           url: "/userbalance/",
@@ -651,6 +652,8 @@ function UserBalance() {
         notification.error({ message: "Yangilashda xatolik yuz berdi!" });
       });
   };
+
+  console.log(userBalanceUpdata, userNameUpdata, "xsxsxsx");
 
   // Open delete confirmation modal
   const openDeleteModal = (id) => {
@@ -892,7 +895,7 @@ function UserBalance() {
         ]}
       >
         <form className="flex flex-col gap-7 max-[768px]:text-[0.9em]">
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <label className="text-[1em] font-medium text-gray-700">
               Foydalanuvchi nomi
             </label>
@@ -902,6 +905,24 @@ function UserBalance() {
               className="h-[35px] rounded-md  text-[1em] max-[768px]:h-[30px]"
               disabled
             />
+          </div> */}
+          <div className="space-y-2">
+            <select
+              id="user"
+              onChange={(e) => setUser(e.target.value)}
+              className="w-full h-[35px] px-3 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 max-[768px]:h-[30px]"
+            >
+              <option value="">Foydalanuvchi tanlang</option>
+              {data2?.map((value) => (
+                <option
+                  className="text-red"
+                  key={value?.username}
+                  value={value.id}
+                >
+                  {value?.username}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="space-y-2">
             <label className="text-[1em] font-medium text-gray-700">

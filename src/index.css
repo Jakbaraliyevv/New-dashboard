@@ -69,3 +69,7 @@
     width: 300px !important;
   }
 }
+
+.modalll {
+  z-index: 9999 !important;
+}

@@ -1,8 +1,13 @@
 import { Button, Input, Modal } from "antd";
 import React, { useEffect, useState } from "react";
-import { EditOutlined, DeleteOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  CloseOutlined,
+  InfoCircleOutlined,
+  ClockCircleOutlined,
+} from "@ant-design/icons";
 import { useAxios } from "../../axios";
-import { data } from "react-router-dom";
 
 function OutgoingComponents() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -14,6 +19,7 @@ function OutgoingComponents() {
   const [userData, setUserData] = useState();
   const [outGoing, setOutgoing] = useState();
   const [deleteId, setDeleteId] = useState(null);
+  const [currentItem, setCurrentItem] = useState(null); // Edit qilinadigan element
 
   const [branch, setBranch] = useState();
   const [benzin, setBenzin] = useState();
@@ -26,7 +32,7 @@ function OutgoingComponents() {
 
   // Textni koproq korish uchun bu <>
 
-  const truncateText = (text, maxLength = 30) => {
+  const truncateText = (text, maxLength = 17) => {
     if (text && text.length > maxLength) {
       return text.substring(0, maxLength) + "...";
     }
@@ -34,12 +40,27 @@ function OutgoingComponents() {
   };
 
   // Modalni ochish va tahrirlash holatini belgilash
-  const openModal = (isEditMode) => {
+  const openModal = (isEditMode, item = null) => {
     setIsEdit(isEditMode);
     setIsModalOpen(true);
-    if (!isEditMode) {
+
+    if (isEditMode && item) {
+      setCurrentItem(item);
+      // Modal formga tanlab olingan ma'lumotlarni to'ldirish
+      setFillial(item.branch_id || "");
+      setGetUser(item.user_id || "");
+      SetGetbenzin(item.benzin_id || "");
+      setMiqdor(item.miqdori || "");
+      setSabab(item.sabab || "");
+    } else {
       clearForm();
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIsEdit(false);
+    setCurrentItem(null);
   };
 
   // Textni koproq korish uchun bu </>
@@ -98,19 +119,55 @@ function OutgoingComponents() {
 
     return `${day}.${month}.${year}, ${hours}:${minutes}`;
   };
-  //   User Datani get qilish </>
-  const postData = () => {
-    data = {
+
+  const clearForm = () => {
+    setGetUser("");
+    setMiqdor("");
+    setSabab("");
+    setFillial("");
+    SetGetbenzin("");
+    setCurrentItem(null);
+  };
+
+  // Yangi ma'lumot qo'shish yoki mavjud ma'lumotni yangilash
+  const handleSubmit = () => {
+    const data = {
       user: getUser,
       miqdori: miqdor,
       sabab: sabab,
       branch: fillial,
-      benzin: getBenzin,
+      benzin_id: getBenzin,
     };
 
-    console.log(data, "data");
+    if (isEdit && currentItem) {
+      // Edit qilish (PATCH so'rovi)
+      axios({
+        method: "PATCH",
+        url: `/outgoings/${currentItem.id}/`,
+        data,
+      })
+        .then((response) => {
+          console.log("Ma'lumot yangilandi:", response);
+          closeModal();
+          getOutgongData();
+        })
+        .catch((error) => console.log("Yangilashda xatolik:", error));
+    } else {
+      // Yangi ma'lumot qo'shish (POST so'rovi)
+      axios({
+        method: "POST",
+        url: "/outgoing/",
+        data,
+      })
+        .then((data) => {
+          console.log("Ma'lumot qo'shildi:", data);
+          closeModal();
+          getOutgongData();
+        })
+        .catch((error) => console.log("Qo'shishda xatolik:", error));
+    }
   };
-  const clearForm = () => {};
+
   const deleteBenzin = () => {
     axios({
       url: `/outgoings/${deleteId}/`,
@@ -125,6 +182,7 @@ function OutgoingComponents() {
         console.error(err);
       });
   };
+
   return (
     <section>
       <div className="">
@@ -175,7 +233,10 @@ function OutgoingComponents() {
                   className="border border-gray-300 px-4 py-2 text-center relative group"
                 >
                   <div className="flex items-center justify-center">
-                    <span className="mr-1">{truncateText(value?.sabab)}</span>
+                    <span className="mr-1">
+                      {truncateText(value?.sabab)}
+                      <InfoCircleOutlined className="text-blue-500 ml-1 cursor-pointer" />
+                    </span>
                   </div>
                 </td>
                 <td className="border border-gray-300 px-4 py-2 text-center">
@@ -185,7 +246,7 @@ function OutgoingComponents() {
                   <Button
                     className="w-[40px] mr-2"
                     type="primary"
-                    onClick={() => openModal(true)} // Edit holatida
+                    onClick={() => openModal(true, value)} // Edit holatida va qiymatni berish
                   >
                     <EditOutlined />
                   </Button>
@@ -207,8 +268,15 @@ function OutgoingComponents() {
 
         {/* To'liq matnni ko'rsatish uchun modal */}
         {showFullReason && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+          <div className="fixed inset-0 flex items-center justify-center z-[9999]">
+            {/* Modal overlay (qora fon) */}
+            <div
+              className="absolute inset-0 bg-black bg-opacity-50"
+              onClick={() => setShowFullReason(false)}
+            ></div>
+
+            {/* Modal content */}
+            <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-[90%] mx-auto">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-medium">To'liq sabab</h3>
                 <button
@@ -230,6 +298,68 @@ function OutgoingComponents() {
             </div>
           </div>
         )}
+        <div className="flex-col gap-3 mt-5 bg-gray-200  hidden max-[768px]:flex max-[768px]:block">
+          {userData?.results?.map((value) => (
+            <div className="space-y-4" key={value?.id}>
+              <div className="border shadow-sm p-4 bg-white rounded-md">
+                <div className="flex justify-between pb-2 border-b">
+                  <span className="font-medium">Branch</span>
+                  <span>{value?.branch}</span>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Name</span>
+                  <span>{value?.user}</span>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Miqdori</span>
+                  <span>{value?.miqdori}</span>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Sabab</span>
+                  <div className="flex items-center">
+                    <span className="text-right max-w-[180px] truncate">
+                      {truncateText(value?.sabab)}
+                    </span>
+                    <InfoCircleOutlined
+                      className="text-blue-500 ml-1 cursor-pointer"
+                      onClick={() => {
+                        setActiveReason(value?.sabab);
+                        setShowFullReason(true);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Yaratilgan vaqti</span>
+                  <div className="flex items-center">
+                    <ClockCircleOutlined className="text-gray-500 mr-1" />
+                    <span>{formatDate(value?.vaqti)}</span>
+                  </div>
+                </div>
+                <div className="flex justify-between mt-3 pb-2">
+                  <span className="font-medium">Amallar</span>
+                  <span className="flex items-center gap-4">
+                    <p
+                      className="flex items-center text-blue-600 cursor-pointer"
+                      onClick={() => openModal(true, value)} // Mobilga ham qo'shildi
+                    >
+                      <EditOutlined className="mr-1" /> Edit
+                    </p>
+                    <p
+                      className="flex items-center text-red-600 cursor-pointer"
+                      onClick={() => {
+                        setDeleteId(value?.id);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    >
+                      <DeleteOutlined className="mr-1" /> Delete
+                    </p>
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Create/Edit Modal */}
@@ -255,7 +385,7 @@ function OutgoingComponents() {
             className="w-[120px] text-[15px] max-[768px]:w-[90px] max-[768px]:text-[12px]"
             key="submit"
             type="primary"
-            onClick={postData}
+            onClick={handleSubmit}
           >
             {isEdit ? "Yangilash" : "Saqlash"}
           </Button>,
@@ -272,6 +402,7 @@ function OutgoingComponents() {
               </label>
               <select
                 id="branch"
+                value={fillial}
                 onChange={(e) => setFillial(e.target.value)}
                 className="w-full h-[35px] px-3 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 max-[768px]:h-[30px]"
               >
@@ -292,7 +423,8 @@ function OutgoingComponents() {
               </label>
               <select
                 id="user"
-                onChange={(e) => setUserData(e.target.value)}
+                value={getUser}
+                onChange={(e) => setGetUser(e.target.value)}
                 className="w-full h-[35px] px-3 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 max-[768px]:h-[30px]"
               >
                 <option value="">Foydalanuvchi tanlang</option>
@@ -312,6 +444,7 @@ function OutgoingComponents() {
                 Benzin turi
               </label>
               <select
+                value={getBenzin}
                 onChange={(e) => SetGetbenzin(e.target.value)}
                 name="benzin_brand"
                 className="w-full h-[35px] px-3 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 max-[768px]:h-[30px]"
@@ -332,6 +465,7 @@ function OutgoingComponents() {
                 Miqdori
               </label>
               <Input
+                value={miqdor}
                 id="benzin"
                 className="h-[35px] rounded-md text-[1em] max-[768px]:h-[30px]"
                 onChange={(e) => setMiqdor(e.target.value)}
@@ -340,6 +474,7 @@ function OutgoingComponents() {
             </div>
             <div>
               <Input.TextArea
+                value={sabab}
                 onChange={(e) => setSabab(e.target.value)}
                 placeholder="Sababni kiriting"
                 rows={4}
@@ -369,12 +504,12 @@ function OutgoingComponents() {
             danger
             onClick={deleteBenzin}
           >
-            Ha, o‘chirish
+            Ha, o'chirish
           </Button>,
         ]}
       >
         <p className="text-[1em] max-[768px]:text-[0.9em]">
-          Rostdan ham ushbu benzin turini o‘chirmoqchimisiz?
+          Rostdan ham ushbu benzin turini o'chirmoqchimisiz?
         </p>
       </Modal>
     </section>
