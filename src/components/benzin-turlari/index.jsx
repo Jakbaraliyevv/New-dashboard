@@ -491,9 +491,6 @@ import notificationApi from "../../generic/notify";
 import { useAxios } from "../../axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
-
-
-
 function BenzinTurlari() {
   const axios = useAxios();
   const notify = notificationApi();
@@ -508,7 +505,6 @@ function BenzinTurlari() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [selectt, setSelect] = useState("");
-  const [stock, setStock] = useState("");
   const [benzinData, setBenzinData] = useState([]);
 
   const location = useLocation();
@@ -541,20 +537,20 @@ function BenzinTurlari() {
   const clearForm = () => {
     setName("");
     setPrice("");
-    setStock("");
     setSelect("");
     setEditId(null);
     setIsEdit(false);
   };
 
   const postData = () => {
-    if (!selectt || !name || !price || !stock) {
+    if (!selectt || !name || !price) {
       notify({ type: "fullData" });
       return;
     }
 
-    const data = { branch: selectt, name, price, stock };
+    const data = { branch: selectt, name, price };
 
+    console.log(data, "stockData");
     if (isEdit && editId) {
       // EDIT
       axios({
@@ -589,7 +585,6 @@ function BenzinTurlari() {
   const openEditModal = (value) => {
     setName(value?.name);
     setPrice(value?.price);
-    setStock(value?.stock);
     setSelect(value?.branch);
     setEditId(value?.id);
     setIsEdit(true);
@@ -612,8 +607,9 @@ function BenzinTurlari() {
       });
   };
 
+  console.log(benzinData, "benzinnxn");
   return (
-    <section >
+    <section>
       <div className="">
         <div className="bg-blue-600 flex items-center justify-between p-5 rounded-md">
           <h2 className="text-[#FFF] text-[25px] font-bold">Benzin turlari</h2>
@@ -653,9 +649,9 @@ function BenzinTurlari() {
                     {value?.price}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
-                    {value?.stock}
-                    dcdcd
+                    {value?.stock_quantity}
                   </td>
+
                   <td className="border border-gray-300 px-4 py-2 flex text-center">
                     <Button
                       className="w-[40px] mr-2"
@@ -707,8 +703,9 @@ function BenzinTurlari() {
                 </div>
                 <div className="flex justify-between mt-2 pb-2 border-b">
                   <span className="font-medium">Stock</span>
-                  <span>{value?.stock}</span>
+                  <span className="">{value?.stock_quantity}</span>
                 </div>
+
                 <div className="flex justify-between mt-3  border-b">
                   <span className="font-medium">Amallar</span>
                   <span className="flex items-center gap-4">
@@ -794,21 +791,7 @@ function BenzinTurlari() {
                 placeholder="Benzin narxini kiriting"
               />
             </div>
-            <div className="space-y-2">
-              <label
-                htmlFor="qoldiq"
-                className="text-[1em] font-medium text-gray-700"
-              >
-                Benzin qoldiq
-              </label>
-              <Input
-                id="qoldiq"
-                className="h-[35px] rounded-md text-[1em] max-[768px]:h-[30px]"
-                value={stock}
-                onChange={(e) => setStock(e.target.value)}
-                placeholder="Benzin qoldigini kiriting"
-              />
-            </div>
+
             <div className="space-y-2">
               <label
                 htmlFor="branch"

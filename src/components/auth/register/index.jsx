@@ -32,6 +32,7 @@ function Register() {
 
     try {
       const response = await fetch("https://bcrm.uz/api/register/", {
+        // const response = await fetch("http://192.168.1.193:8000/api/register/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

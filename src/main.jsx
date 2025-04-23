@@ -8,9 +8,7 @@ import { router } from "./router/index.jsx";
 import "antd/dist/reset.css"; // Ant Design uchun to‘g‘ri import
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </StrictMode>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

@@ -1,6 +1,12 @@
 import { Button, Input, Modal } from "antd";
 import React, { useEffect, useState } from "react";
-import { EditOutlined, DeleteOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  CloseOutlined,
+  InfoCircleOutlined,
+  ClockCircleOutlined,
+} from "@ant-design/icons";
 import { useAxios } from "../../axios";
 
 function DebtQarzlarComponents() {
@@ -11,6 +17,8 @@ function DebtQarzlarComponents() {
   const [activeReason, setActiveReason] = useState("");
   const [userData, setUserData] = useState();
   const [deleteId, setDeleteId] = useState(null);
+  const [editId, setEditId] = useState(null);
+  const [edit, setEdit] = useState(false);
 
   const [branch, setBranch] = useState();
   //  Get input value
@@ -32,7 +40,6 @@ function DebtQarzlarComponents() {
   // Modalni ochish va tahrirlash holatini belgilash
   const openModal = (isEditMode) => {
     setIsEdit(isEditMode);
-    setIsModalOpen(true);
     if (!isEditMode) {
       clearForm();
     }
@@ -79,15 +86,57 @@ function DebtQarzlarComponents() {
 
   const postData = () => {
     const data = {
-      name,
-      miqdor,
+      nomi: name,
+      miqdori: miqdor,
       branch: fillial,
-      izoh: sabab,
+      description: sabab,
     };
-    console.log(data, "data");
+
+    console.log(data, "valiee");
+    if (edit && editId) {
+      axios({
+        url: `/debts/${editId}/`,
+        method: "PUT",
+        data,
+      })
+        .then((data) => {
+          console.log(data);
+          getOutgongData();
+          clearForm();
+        })
+        .catch((error) => console.log(error));
+    } else {
+      axios({
+        url: "/debt/",
+        method: "POST",
+        data,
+      })
+        .then((data) => {
+          console.log(data);
+          getOutgongData();
+          clearForm();
+        })
+        .catch((error) => console.log(error));
+    }
   };
 
-  const clearForm = () => {};
+  const clearForm = () => {
+    setName("");
+    setMiqdor("");
+    setSabab("");
+    setEditId("");
+    setIsModalOpen(false);
+    setEdit(null);
+  };
+
+  const openEditModal = (value) => {
+    setName(value?.nomi);
+    setMiqdor(value?.miqdori);
+    setSabab(value?.description);
+    setEditId(value?.id);
+    setIsModalOpen(true);
+    setEdit(true);
+  };
 
   const deleteBenzin = () => {
     axios({
@@ -104,12 +153,15 @@ function DebtQarzlarComponents() {
       });
   };
   return (
-    <section >
+    <section>
       <div className="">
         <div className="bg-blue-600 flex items-center justify-between p-5 rounded-md">
           <h2 className="text-[#FFF] text-[25px] font-bold">Qarzlar</h2>
           <Button
-            onClick={() => openModal(false)} // Add holatida
+            onClick={() => {
+              openModal(false);
+              setIsModalOpen(true);
+            }} // Add holatida
           >
             Add Qarz
           </Button>
@@ -155,6 +207,7 @@ function DebtQarzlarComponents() {
                   <div className="flex items-center justify-center">
                     <span className="mr-1">
                       {truncateText(value?.description)}
+                      <InfoCircleOutlined className="text-blue-500 ml-1 cursor-pointer" />
                     </span>
                   </div>
                 </td>
@@ -165,7 +218,10 @@ function DebtQarzlarComponents() {
                   <Button
                     className="w-[40px] mr-2"
                     type="primary"
-                    onClick={() => openModal(true)} // Edit holatida
+                    onClick={() => {
+                      openModal(true);
+                      openEditModal(value);
+                    }} // Edit holatida
                   >
                     <EditOutlined />
                   </Button>
@@ -187,7 +243,7 @@ function DebtQarzlarComponents() {
 
         {/* To'liq matnni ko'rsatish uchun modal */}
         {showFullReason && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-medium">To'liq sabab</h3>
@@ -210,6 +266,72 @@ function DebtQarzlarComponents() {
             </div>
           </div>
         )}
+
+        <div className=" flex-col gap-3 mt-5 bg-gray-200  hidden max-[768px:flex max-[768px]:block">
+          {userData?.results?.map((value) => (
+            <div className="space-y-4" key={value?.id}>
+              <div className="border shadow-sm p-4 bg-white rounded-md">
+                <div className="flex justify-between pb-2 border-b">
+                  <span className="font-medium">Branch</span>
+                  <span>{value?.branch}</span>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Name</span>
+                  <span>{value?.nomi}</span>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Miqdori</span>
+                  <span>{value?.miqdori}</span>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Sabab</span>
+                  <div className="flex items-center">
+                    <span className="text-right max-w-[180px] truncate">
+                      {truncateText(value?.description)}
+                    </span>
+                    <InfoCircleOutlined
+                      className="text-blue-500 ml-1 cursor-pointer"
+                      onClick={() => {
+                        setActiveReason(value?.description);
+                        setShowFullReason(true);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-between mt-2 pb-2 border-b">
+                  <span className="font-medium">Yaratilgan vaqti</span>
+                  <div className="flex items-center">
+                    <ClockCircleOutlined className="text-gray-500 mr-1" />
+                    <span>{formatDate(value?.created_at)}</span>
+                  </div>
+                </div>
+                <div className="flex justify-between mt-3 pb-2">
+                  <span className="font-medium">Amallar</span>
+                  <span className="flex items-center gap-4">
+                    <p
+                      className="flex items-center text-blue-600 cursor-pointer"
+                      onClick={() => {
+                        openModal(true);
+                        openEditModal(value);
+                      }} // Mobilga ham qo'shildi
+                    >
+                      <EditOutlined className="mr-1" /> Edit
+                    </p>
+                    <p
+                      className="flex items-center text-red-600 cursor-pointer"
+                      onClick={() => {
+                        setDeleteId(value?.id);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    >
+                      <DeleteOutlined className="mr-1" /> Delete
+                    </p>
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Create/Edit Modal */}
@@ -272,7 +394,7 @@ function DebtQarzlarComponents() {
                 Nomi
               </label>
               <Input
-                id="benzin"
+                value={name}
                 className="h-[35px] rounded-md text-[1em] max-[768px]:h-[30px]"
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Nomini kiriting"
@@ -286,7 +408,7 @@ function DebtQarzlarComponents() {
                 Miqdori
               </label>
               <Input
-                id="benzin"
+                value={miqdor}
                 className="h-[35px] rounded-md text-[1em] max-[768px]:h-[30px]"
                 onChange={(e) => setMiqdor(e.target.value)}
                 placeholder="Benzin miqdorini kiriting"
@@ -300,6 +422,7 @@ function DebtQarzlarComponents() {
                 Izoh
               </label>
               <Input.TextArea
+                value={sabab}
                 onChange={(e) => setSabab(e.target.value)}
                 placeholder="Izohni kiriting"
                 rows={4}
